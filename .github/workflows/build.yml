@@ -84,7 +84,7 @@ jobs:
             || 'true' }}
 
       - name: nix build
-        run: nix build --keep-going -L ${{ inputs.packages }}
+        run: nix build --extra-nixpkgs-config '{ allowUnfree = true; nvidia.acceptLicense = true; }' --keep-going -L ${{ inputs.packages }}
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
