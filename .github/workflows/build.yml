@@ -10,8 +10,8 @@ on:
         description: "Packages"
         required: false
         type: string
-      allow-unfree:
-        description: "Allow unfree"
+      unfree:
+        description: "Allow unfree packages"
         required: true
         type: boolean
         default: false
@@ -90,9 +90,9 @@ jobs:
               
       - name: nix build
         env:
-         unfree-environment: ${{ inputs.allow-unfree && 'export NIXPKGS_ALLOW_UNFREE=1' || '' }}
-         impure-flag: ${{ inputs.allow-unfree && '--impure' || '' }}
-        run: ${env.unfree-environment} && nix build --keep-going -L ${{ inputs.packages }} ${env.impure-flag}
+         UNFREE_ENVIRONMENT: ${{ inputs.unfree && 'export NIXPKGS_ALLOW_UNFREE=1' || '' }}
+         IMPURE_FLAG: ${{ inputs.unfree && '--impure' || '' }}
+        run: ${UNFREE_ENVIRONMENT} && nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
