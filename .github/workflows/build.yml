@@ -91,7 +91,7 @@ jobs:
       - name: nix build
         if: ${{ inputs.packages != '' }}
         run: |
-          if [ 'allow unfree packages' = ${{ inputs.unfree }}]; then
+          if [ ${{ inputs.unfree.description }} = ${{ inputs.unfree }}]; then
             CMD="export NIXPKGS_ALLOW_UNFREE=1"
             CMD="nix build --keep-going -L ${{ inputs.packages }} --impure"
           else
