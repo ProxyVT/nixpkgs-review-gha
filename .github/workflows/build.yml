@@ -91,7 +91,7 @@ jobs:
       - name: nix build
         run: ${{ inputs.packages != '' &&
           (
-          inputs.unfree
+          inputs.allow-unfree
           && format('export NIXPKGS_ALLOW_UNFREE=1 && nix build --keep-going -L {} --impure', inputs.packages)
           || format('nix build --keep-going -L {}', inputs.packages)
           )
