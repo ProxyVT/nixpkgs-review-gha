@@ -90,12 +90,12 @@ jobs:
 
       - name: nix build
         if: ${{ inputs.packages != '' }}
-        run: |
+        run: build unfree packages |
           if [ ${{ inputs.unfree }} ]; then
-            export NIXPKGS_ALLOW_UNFREE=1
-            CMD="nix build --keep-going -L ${{ inputs.packages }} --impure"
+          export NIXPKGS_ALLOW_UNFREE=1
+          CMD="nix build --keep-going -L ${{ inputs.packages }} --impure"
           else
-            CMD="nix build --keep-going -L ${{ inputs.packages }}"
+          CMD="nix build --keep-going -L ${{ inputs.packages }}"
           fi
           echo "$CMD"
           bash -c "$CMD"
