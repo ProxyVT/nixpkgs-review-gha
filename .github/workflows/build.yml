@@ -89,7 +89,7 @@ jobs:
             || 'true' }}
             
       - name: nix build-unfree
-        if: ${{ inputs.packages-unfree = true }}
+        if: ${{ inputs.packages-unfree }}
         run: export NIXPKGS_ALLOW_INSECURE=1 nix build --impure --keep-going -L ${{ inputs.packages }}
 
       - name: nix build
