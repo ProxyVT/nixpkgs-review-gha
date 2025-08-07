@@ -92,7 +92,7 @@ jobs:
         env:
          NIXPKGS_ALLOW_UNFREE: ${{ inputs.allow-unfree && 'export NIXPKGS_ALLOW_UNFREE=1'}}
          IMPURE_FLAG: ${{ inputs.allow-unfree && '--impure'}}
-        run: ${{ steps.nix }} || nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
+        run: ${NIXPKGS_ALLOW_UNFREE} && nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
