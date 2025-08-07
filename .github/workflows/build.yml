@@ -10,7 +10,7 @@ on:
         description: "Packages"
         required: false
         type: string
-      packages-unfree:
+      allow-unfree:
         description: "Allow unfree"
         required: true
         type: boolean
@@ -87,14 +87,13 @@ jobs:
             || (matrix.system == 'x86_64-darwin' && inputs.x86_64-darwin == 'yes_sandbox_relaxed'
               || matrix.system == 'aarch64-darwin' && inputs.aarch64-darwin == 'yes_sandbox_relaxed') && 'relaxed'
             || 'true' }}
-            
-      - name: nix build-unfree
-        if: ${{ inputs.packages-unfree }}
-        run: export NIXPKGS_ALLOW_UNFREE=1 &&
-             nix build --impure --keep-going -L ${{ inputs.packages }}
               
       - name: nix build
-        run: nix build --keep-going -L ${{ inputs.packages }}
+        run: ${{ steps.nix }} || ${NIXPKGS_ALLOW_UNFREE} || nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
+        env:
+         if: ${{ inputs.allow-unfree }}
+         NIXPKGS_ALLOW_UNFREE: ${{ 'export NIXPKGS_ALLOW_UNFREE=1' || '' }}
+         IMPURE_FLAG: ${{ '--impure' || '' }}
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
