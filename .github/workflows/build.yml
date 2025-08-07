@@ -91,7 +91,6 @@ jobs:
       - name: nix build
         if: ${{ inputs.packages != '' }}
         run: |
-          set -x
           if [ "${{ inputs.unfree }}" = "true" ]; then
             export NIXPKGS_ALLOW_UNFREE=1
             CMD="nix build --keep-going -L ${{ inputs.packages }} --impure"
