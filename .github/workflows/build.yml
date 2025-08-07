@@ -90,8 +90,9 @@ jobs:
             
       - name: nix build-unfree
         if: ${{ inputs.packages-unfree }}
-        run: export NIXPKGS_ALLOW_INSECURE=1 nix build --impure --keep-going -L ${{ inputs.packages }}
-
+        run: export NIXPKGS_ALLOW_UNFREE=1 &&
+             nix build --impure --keep-going -L ${{ inputs.packages }}
+              
       - name: nix build
         run: nix build --keep-going -L ${{ inputs.packages }}
         if: ${{ inputs.packages != '' }}
