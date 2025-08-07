@@ -51,6 +51,7 @@ runs:
           build-dir = /nix/build
           sandbox = ${{ inputs.sandbox }}
           system = ${{ inputs.system }}
+          allowUnfree = true
 
     - name: create build-dir
       shell: bash
