@@ -89,9 +89,8 @@ jobs:
             || 'true' }}
               
       - name: nix build
-        run: ${{ steps.nix }} || ${NIXPKGS_ALLOW_UNFREE} || nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
+        run: ${{ steps.nix }} || ${NIXPKGS_ALLOW_UNFREE} && nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
         env:
-         if: ${{ inputs.allow-unfree }}
          NIXPKGS_ALLOW_UNFREE: ${{ inputs.allow-unfree && 'export NIXPKGS_ALLOW_UNFREE=1'}}
          IMPURE_FLAG: ${{ inputs.allow-unfree && '--impure'}}
         if: ${{ inputs.packages != '' }}
