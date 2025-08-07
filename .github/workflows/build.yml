@@ -91,15 +91,15 @@ jobs:
       - name: nix build
         if: ${{ inputs.packages != '' }}
         run: |
-          # Установим понятный префикс для трассировки
-          export PS4='➤ '
           set -x
           if [ "${{ inputs.unfree }}" = "true" ]; then
             export NIXPKGS_ALLOW_UNFREE=1
-            nix build --keep-going -L ${{ inputs.packages }} --impure
+            CMD="nix build --keep-going -L ${{ inputs.packages }} --impure"
           else
-            nix build --keep-going -L ${{ inputs.packages }}
+            CMD="nix build --keep-going -L ${{ inputs.packages }}"
           fi
+          echo "$CMD"
+          bash -c "$CMD"
 
       - name: start upterm session
         if: ${{ inputs.upterm }}
