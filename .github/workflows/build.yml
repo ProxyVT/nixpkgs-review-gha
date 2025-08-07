@@ -10,6 +10,11 @@ on:
         description: "Packages"
         required: false
         type: string
+      packages-unfree:
+        description: "Allow unfree"
+        required: true
+        type: boolean
+        default: false
       x86_64-linux:
         description: "Build on x86_64-linux"
         required: true
@@ -82,9 +87,13 @@ jobs:
             || (matrix.system == 'x86_64-darwin' && inputs.x86_64-darwin == 'yes_sandbox_relaxed'
               || matrix.system == 'aarch64-darwin' && inputs.aarch64-darwin == 'yes_sandbox_relaxed') && 'relaxed'
             || 'true' }}
+            
+      - name: nix build-unfree
+        if: ${{ inputs.packages-unfree = true }}
+        run: export NIXPKGS_ALLOW_INSECURE=1 nix build --impure --keep-going -L ${{ inputs.packages }}
 
       - name: nix build
-        run: nix build --extra-nixpkgs-config '{ allowUnfree = true; nvidia.acceptLicense = true; }' --keep-going -L ${{ inputs.packages }}
+        run: nix build --keep-going -L ${{ inputs.packages }}
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
