@@ -95,6 +95,7 @@ jobs:
           && format('export NIXPKGS_ALLOW_UNFREE=1 && nix build --keep-going -L {} --impure', inputs.packages)
           || format('nix build --keep-going -L {}', inputs.packages)
           )
+          }}
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
