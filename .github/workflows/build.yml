@@ -89,10 +89,12 @@ jobs:
             || 'true' }}
               
       - name: nix build
-        env:
-         UNFREE_ENVIRONMENT: ${{ inputs.unfree && 'export NIXPKGS_ALLOW_UNFREE=1' || '' }}
-         IMPURE_FLAG: ${{ inputs.unfree && '--impure' || '' }}
-        run: ${UNFREE_ENVIRONMENT} && nix build --keep-going -L ${{ inputs.packages }} ${IMPURE_FLAG}
+        run: ${{ inputs.packages != '' &&
+          (
+            inputs.unfree
+              && format('export NIXPKGS_ALLOW_UNFREE=1 && nix build --keep-going -L {} --impure', inputs.packages)
+              || format('nix build --keep-going -L {}', inputs.packages)
+          )
         if: ${{ inputs.packages != '' }}
 
       - name: start upterm session
