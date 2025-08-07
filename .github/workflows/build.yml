@@ -89,14 +89,14 @@ jobs:
             || 'true' }}
 
       - name: nix build
-        run: ${{ inputs.packages != '' &&
-          (
-          inputs.allow-unfree
-          && format('export NIXPKGS_ALLOW_UNFREE=1 && nix build --keep-going -L {} --impure', inputs.packages)
-          || format('nix build --keep-going -L {}', inputs.packages)
-          )
-          }}
         if: ${{ inputs.packages != '' }}
+        run: |
+          if [ "${{ inputs.unfree }}" = "true" ]; then
+            export NIXPKGS_ALLOW_UNFREE=1
+            nix build --keep-going -L ${{ inputs.packages }} --impure
+          else
+            nix build --keep-going -L ${{ inputs.packages }}
+          fi
 
       - name: start upterm session
         if: ${{ inputs.upterm }}
